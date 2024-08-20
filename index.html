@@ -11,7 +11,10 @@
 
     <script>
         async function fetchFiles() {
-            const response = await fetch('https://github.com/eZacharyWang/zhicheng_pages/tree/plotly');
+            const response = await fetch('https://api.github.com/repos/eZacharyWang/zhicheng_pages/contents/?ref=plotly');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const files = await response.json();
             const fileList = document.getElementById('file-list');
 
@@ -25,7 +28,11 @@
             });
         }
 
-        fetchFiles();
+        fetchFiles().catch(error => {
+            console.error('Error fetching files:', error);
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '<li>Error loading files.</li>';
+        });
     </script>
 </body>
 </html>
